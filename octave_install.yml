@@ -30,6 +30,6 @@
   - name: attempting copy of octave image library file
     copy: src=../ansible_files/imremap.m dest=/usr/share/octave/packages/image-2.4.0/imremap.m
   - name: attempting to copy vlfeat script
-    copy: src=/root/ansible_application/ansible_scripts/install_vlfeat.sh dest=/root/install_vlfeat.sh owner=root group=root mode=775
+    copy: src=/path/to/ansible/scripts/ansible_application/ansible_scripts/install_vlfeat.sh dest=/path/to/remote-scripts/install_vlfeat.sh owner=root group=root mode=775
   - name: Execute the VLFeat script
-    command: sh /root/install_vlfeat.sh
+    command: sh /path/to/remote-scripts/install_vlfeat.sh
