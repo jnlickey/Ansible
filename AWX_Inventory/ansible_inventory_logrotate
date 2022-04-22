@@ -1,0 +1,13 @@
+/usr/local/ansible/inventory {
+	daily
+        missingok
+        rotate 7
+        compress
+        delaycompress
+        notifempty
+        create 0644 ansible root
+        sharedscripts
+        postrotate
+                sudo su - ansible -c "/bin/bash /usr/local/scripts/BuildInventory.sh"
+        endscript
+}
