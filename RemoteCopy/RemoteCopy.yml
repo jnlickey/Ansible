@@ -1,0 +1,67 @@
+---
+- hosts: "{{ HostFROM }}"
+  become: true
+  gather_facts: false
+  vars:
+    TMPFile: "{{ Path_Copy_FROM | regex_search('(\\w+$)|(\\w+.\\w+$)', ignorecase=true)}}"
+
+  tasks:
+    - name: File Permissions
+      shell: stat "{{Path_Copy_FROM}}" | grep Access | awk '{print $2" "$6" "$10}' | head -1 | sed 's/)//g;s/(//g' | cut -d'/' -f1
+      args:
+        executable: /bin/bash
+      register: TMPFilePERM
+
+    - name: File Owner 
+      shell: stat "{{Path_Copy_FROM}}" | grep Access | awk '{print $2" "$6" "$10}' | head -1 | sed 's/)//g;s/(//g' | awk '{print $2}'
+      args:
+        executable: /bin/bash
+      register: TMPFileOWNER
+    
+    - name: File Group 
+      shell: stat "{{Path_Copy_FROM}}" | grep Access | awk '{print $2" "$6" "$10}' | head -1 | sed 's/)//g;s/(//g' | awk '{print $3}'
+      args:
+        executable: /bin/bash
+      register: TMPFileGROUP
+    
+    - name: Get File
+      ansible.builtin.fetch:
+        src: "{{ Path_Copy_FROM }}"
+        dest: /tmp/"{{ TMPFile }}"
+        flat: true
+
+    - name: Create Dummy_Host for storing variables
+      add_host:
+        name: "DUMMY_HOST"
+        TMPFile: "{{ TMPFile }}"
+        TMPFilePERM: "{{ TMPFilePERM }}"
+        TMPFileOWNER: "{{ TMPFileOWNER }}"
+        TMPFileGROUP: "{{ TMPFileGROUP }}"
+        HostFROM: "{{ HostFROM }}"
+        HostTO: "{{ HostTO }}"
+        Path_Copy_TO: "{{ Path_Copy_TO }}"
+
+- hosts: "{{ HostTO }}"
+  become: true
+  gather_facts: true
+  vars:
+    HostFROM: "{{ HostFROM }}"
+    TMPFile: "{{ Path_Copy_FROM | regex_search('(\\w+$)|(\\w+.\\w+$)', ignorecase=true)}}"
+    TMPFileOWNER: "{{ hostvars['DUMMY_HOST']['TMPFileOWNER'].stdout}}"
+    TMPFileGROUP: "{{ hostvars['DUMMY_HOST']['TMPFileGROUP'].stdout}}"
+    TMPFilePERM: "{{ hostvars['DUMMY_HOST']['TMPFilePERM'].stdout}}"
+    Path_Copy_TO: "{{ hostvars['DUMMY_HOST']['Path_Copy_TO'].stdout}}"
+
+  tasks:
+    - name: Copy file to Remote Server
+      ansible.builtin.copy:
+        src: /tmp/"{{ TMPFile }}"
+        dest: "{{ Path_Copy_TO }}/{{ TMPFile }}"
+
+    - name: Set file permissions
+      ansible.builtin.file:
+        path: "{{ Path_Copy_TO }}/{{ TMPFile }}"
+        owner: "{{TMPFileOWNER}}"
+        group: "{{TMPFileGROUP}}" 
+        mode: "{{TMPFilePERM}}"
+...
