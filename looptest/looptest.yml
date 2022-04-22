@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: Testing loop
+    debug: msg="{{item}}"
+    loop: "{{ lookup('file', '/path/to/file/looptest.txt').splitlines() }}"
+...
