@@ -1,0 +1,35 @@
+---
+- hosts: '{{ hosts }}'
+  remote_user: <remote_install_username>
+  tasks:
+  - name: Pinging the hosts to find ssh-able
+    ping:
+  - name: Installing first octave repository to apt
+    apt_repository: repo='deb http://ppa.launchpad.net/octave/stable/ubuntu trusty main' state=present
+  - name: Installing secont octave repository to apt
+    apt_repository: repo='deb-src http://ppa.launchpad.net/octave/stable/ubuntu trusty main' state=present
+#  - name: Installing octave/stable ppa
+#    apt_repository: repo=ppa:octave/stable
+  - name: Updating key signature
+    apt_key: keyserver=keyserver.ubuntu.com id=F265CD39647D184843E5F27D4F2D377DDCB1CB6E
+  - name: Updating the apt cache
+    apt: update_cache=yes
+  - name: Installing latest version of octave
+    apt: name=octave state=present
+  - name: Installing octave packages
+    action: apt pkg={{ item }} state=present
+    with_items:
+      - octave-image
+      - octave-ga
+      - octave-missing-functions
+      - liboctave-dev
+  - name: attempting a copy of our octaverc
+    copy: src=../ansible_files/octaverc dest=/usr/share/octave/site/m/startup/octaverc
+  - name: attempting copy of octave image library file
+    copy: src=../ansible_files/imresize.m dest=/usr/share/octave/packages/image-2.4.0/imresize.m
+  - name: attempting copy of octave image library file
+    copy: src=../ansible_files/imremap.m dest=/usr/share/octave/packages/image-2.4.0/imremap.m
+  - name: attempting to copy vlfeat script
+    copy: src=/path/to/ansible/scripts/ansible_application/ansible_scripts/install_vlfeat.sh dest=/path/to/remote-scripts/install_vlfeat.sh owner=root group=root mode=775
+  - name: Execute the VLFeat script
+    command: sh /path/to/remote-scripts/install_vlfeat.sh
