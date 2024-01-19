@@ -1,0 +1,18 @@
+# Function for allowing ansible commands to be ran
+function ansible(){
+        args=("$@")
+
+        arguments2pass=$(
+            n=0
+            while [ $n -le $# ];do
+               printf "%s " ${args[${n}]}
+               n=$(( $n + 1 ))
+            done
+            echo -ne "\n"
+        )
+        if [[ ! $args = 0 ]];then
+                docker-compose exec ansible bash -c "ansible ${arguments2pass}"
+        else
+                docker-compose exec ansible bash -c "ansible"
+        fi
+}

@@ -1,0 +1,3 @@
+Acquire::http::proxy "http://proxy.example.com:port";
+Acquire::https::proxy "http://proxy.example.com:port";
+Acquire::ftp::proxy "ftp://proxy.example.com:port";
