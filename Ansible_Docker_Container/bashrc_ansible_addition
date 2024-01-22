@@ -1,5 +1,7 @@
 # Function for allowing ansible commands to be ran
 function ansible(){
+        old_dir=$pwd
+        cd /docker-services/ansible
         args=("$@")
 
         arguments2pass=$(
@@ -15,4 +17,5 @@ function ansible(){
         else
                 docker-compose exec ansible bash -c "ansible"
         fi
+        cd $old_dir
 }
