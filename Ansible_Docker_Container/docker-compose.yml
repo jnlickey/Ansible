@@ -4,17 +4,19 @@ version: '3'
 services:
   ansible:
     image: ansible:latest
+    init: true
     container_name: ansible
     hostname: ansible_container
     user: ansible
-    #restart: unless-stopped
+    restart: unless-stopped
     volumes:
       - "/usr/bin/ping:/usr/bin/ping"
       - "/etc/ansible/hosts:/etc/ansible/hosts"
       - "/home/ansible/:/home/ansible/"
     networks:
       - host
-    command: ["ping", "127.0.0.1"]
+    command: ["sleep", "infinity"]
+    #command: ["ping", "127.0.0.1"]
 
 volumes:
   sock:

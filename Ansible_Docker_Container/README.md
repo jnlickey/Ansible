@@ -22,8 +22,19 @@
   ```
 8. Add ansible function to users /home/$USER/.bashrc file
   * This allows the user to send ad-hoc ansible commands into the docker container and get feedback at the standard server prompt, without needing to login to the container itself.
+  ```
+     # Add the following line to /home/ansible/.bashrc
+     source /docker-services/ansible/ansible-script.sh
+  ```
 9. Create Ansible inventory on local server in /etc/ansible/hosts, it gets passed into the container. Any changes to the inventory will require the container to be restarted.
   ```
      mkdir /etc/ansible
      vim /etc/ansible/hosts
+     # Host entries need to be one per line
+     # Various examples:
+     # NOTE: Group names are case sensitive
+     [Group_Name]
+     server1
+     server2 ansible\_host=\<ip\_address\>
+     server3 ansible\_host=\<ip\_address\> ansible\_port=\<port\_number\>
   ```
