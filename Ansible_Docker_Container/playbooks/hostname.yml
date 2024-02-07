@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+  - name: Grab the hostname of the server
+    shell: hostname
+    register: output
+  - debug:
+      var: output.stdout
+...
