@@ -52,7 +52,8 @@
   ```
 11. Start up the ansible container
   ```docker-compose up -d```
-12. You now should be able to run the following commands to test the Ansible setup:
-  ```ansible -m ping <server>```
-  ```ansible-playbook hostname.yml [ -l <server> | all ]```
+12. You now should be able to run the following commands to test the Ansible setup:<\br>
+  ```
+  ansible -m ping \<server\>
+  ansible-playbook hostname.yml [ -l \<server\> | all ]
   ```
