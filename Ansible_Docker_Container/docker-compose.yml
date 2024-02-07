@@ -12,7 +12,7 @@ services:
     working_dir: /home/ansible/playbooks
     environment:
       - ANSIBLE_PLAYBOOK_DIR=/home/ansible/playbooks
-      - TZ=America/Los_Angeles
+      - TZ=America/Indianapolis
     volumes:
       - "/docker-services/ansible/.bashrc:/home/ansible/.bashrc"
       - "/usr/bin/ping:/usr/bin/ping"
