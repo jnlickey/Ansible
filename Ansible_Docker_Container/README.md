@@ -33,8 +33,15 @@
      # Host entries need to be one per line
      # Various examples:
      # NOTE: Group names are case sensitive
-     [Group_Name]
+     [Group_Name:children]
+     Group1_Name
+     Group2_Name
+
+     [Group1_Name]
      server1
      server2 ansible\_host=\<ip\_address\>
      server3 ansible\_host=\<ip\_address\> ansible\_port=\<port\_number\>
+ 
+     [Group2_Name]
+     server4 ansible\_host=\<ip\_address\> ansible\_port=\<port\_number\>
   ```

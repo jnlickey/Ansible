@@ -9,14 +9,21 @@ services:
     hostname: ansible_container
     user: ansible
     restart: unless-stopped
+    working_dir: /home/ansible/playbooks
+    environment:
+      - ANSIBLE_PLAYBOOK_DIR=/home/ansible/playbooks
+      - TZ=America/Los_Angeles
     volumes:
+      - "/docker-services/ansible/.bashrc:/home/ansible/.bashrc"
       - "/usr/bin/ping:/usr/bin/ping"
-      - "/etc/ansible/hosts:/etc/ansible/hosts"
-      - "/home/ansible/:/home/ansible/"
+      - "/docker-services/ansible/hosts:/etc/ansible/hosts"
+      - "/docker-services/ansible/ansible.cfg:/etc/ansible/ansible.cfg"
+      - "/home/ansible/.ssh:/home/ansible/.ssh"
+      - "/docker-services/ansible/playbooks:/home/ansible/playbooks"
+      - "/docker-services/ansible/scripts:/app/scripts/"
     networks:
       - host
-    command: ["sleep", "infinity"]
-    #command: ["ping", "127.0.0.1"]
+    command: sh -c "/bin/bash;sleep infinity"
 
 volumes:
   sock:
