@@ -44,4 +44,14 @@
  
      [Group2_Name]
      server4 ansible\_host=\<ip\_address\> ansible\_port=\<port\_number\>
+10. Create a directory that will hold all playbooks and roles. Note, the default location for roles is in a directory named "roles" inside the playbook directory. The playbooks directory will get passed into the container on startup, and there is NO NEED to restart the container each time a new playbook is created in the playbooks directory.
+  ```
+  mkdir /docker-services/ansible/playbooks
+  mkdir /docker-services/ansible/playbooks/roles
+  ```
+11. Start up the ansible container
+  ```docker-compose up -d```
+12. You now should be able to run the following commands to test the Ansible setup:
+  ```ansible -m ping <server>```
+  ```ansible-playbook hostname.yml [ -l <server> | all ]```
   ```
